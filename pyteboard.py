@@ -65,3 +65,6 @@ controls_frame.pack(side="top", fill="x") # 'packs' a widget within the parent w
 # create 2 buttons with default positions within the screen
 color_button = tk.Button(controls_frame, text="Change Color", command=change_pen_color) # create the color button within the controls frame, with name text, and using the change_pen_color function
 clear_button = tk.Button(controls_frame, text="Clear Canvas", command=lambda: canvas.delete("all")) # create the clear canvas button with a lambda function passthrough on command to delete elements on the canvas
+
+color_button.pack(side="left", padx=5, pady=5) # set color button to default left side with 5 padding on x & y
+clear_button.pack(side="left", padx=5, pady=5) # set clear button to default left side with 5 padding on x & y
