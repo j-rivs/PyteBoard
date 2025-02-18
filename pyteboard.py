@@ -90,4 +90,13 @@ line_width_slider.set(line_width) # Sets the initial position of the slider to t
 line_width_slider.pack(side="left", padx=5, pady=5) # configures the widgets place within the control_frame
 
 
-# root.mainloop() # .mainloop keeps the window running until exited by the user (or crashes)
+
+"""Connect Features to GUI"""
+
+# bind/link coded functions with buttons and controls
+canvas.bind("<Button-1>", start_drawing) # begins start_drawing function when the left mouse button is clicked
+canvas.bind("<B1-Motion>",draw) # while left mouse button is held, triggers draw function on the canvas
+canvas.bind("<ButtonRelease-1>", stop_drawing) # when the left mouse button is released (button release event) triggers the stop_drawing function
+
+
+root.mainloop() # .mainloop keeps the window running until exited by the user (or crashes)
