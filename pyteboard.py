@@ -39,6 +39,18 @@ def change_line_width(value): # define function with a value taken as the arg
 
 
 
+"""
+Building GUI
+- title app
+- blank white canvas for drawing
+- frame to hold app controls
+- color selection button
+- clear canvas button
+- slider for line width selection
+"""
+
+
+
 """Window and Canvas Creation"""
 
 # create the white canvas for the whiteboard
@@ -66,5 +78,16 @@ controls_frame.pack(side="top", fill="x") # 'packs' a widget within the parent w
 color_button = tk.Button(controls_frame, text="Change Color", command=change_pen_color) # create the color button within the controls frame, with name text, and using the change_pen_color function
 clear_button = tk.Button(controls_frame, text="Clear Canvas", command=lambda: canvas.delete("all")) # create the clear canvas button with a lambda function passthrough on command to delete elements on the canvas
 
-color_button.pack(side="left", padx=5, pady=5) # set color button to default left side with 5 padding on x & y
-clear_button.pack(side="left", padx=5, pady=5) # set clear button to default left side with 5 padding on x & y
+color_button.pack(side="left", padx=5, pady=5) # set color button to default left side with 5 padding on x & y. Configures the widgets place within the control_frame
+clear_button.pack(side="left", padx=5, pady=5) # configures the widgets place within the control_frame
+
+# create slider for line width control
+line_width_label = tk.Label(controls_frame, text="Line Width: ") # create a label widget for line width in the control frame, gives it a name, and save it to a var
+line_width_label.pack(side="left", padx=5, pady=5) # configures the widgets place within the control_frame
+
+line_width_slider = tk.Scale(controls_frame, from_=1, to=10, orient="horizontal", command=lambda val: change_line_width(val)) # creates a horizontal scale widget that lets the user select line width on a scale from 1 to 10. Command is set to call the change_line_wdith function with the selected lue whenever the slider position is changed
+line_width_slider.set(line_width) # Sets the initial position of the slider to the value stored in line_width (initialized earlier)
+line_width_slider.pack(side="left", padx=5, pady=5) # configures the widgets place within the control_frame
+
+
+# root.mainloop() # .mainloop keeps the window running until exited by the user (or crashes)
