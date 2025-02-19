@@ -3,15 +3,16 @@ from tkinter.colorchooser import askcolor
 
 
 """Storage List"""
-lines = [] # list to store drawn lines
+lines_list = [] # list to store the lines from drawn events
 
 """Functions and Event Handling"""
 
 # function to handle the action of drawing in the GUI
 def start_drawing(event): # defines out start_drawing function and specifies it will take an event as an argument
-    global is_drawing, prev_x, prev_y # declares the 3 global variables
+    global is_drawing, prev_x, prev_y, line_pieces # declares the 4 global variables
     is_drawing = True # set variable to true to indicate a drawing action is in progress
     prev_x, prev_y = event.x, event.y # captures current mouse cursor coordinates when the function is called and assigns x & y to their prev variables. These variables track the starting point of the draw action
+    line_pieces = [] # list for each line made in a draw event # initialize a new line_pieces list for each drawing event
 
 # function for drawing onto the whiteboard canvas
 def draw(event):
@@ -19,13 +20,15 @@ def draw(event):
     if is_drawing: # checks if the is_drawing function is currently active/true
         current_x, current_y = event.x, event.y # creates current values or x & y based on their event values
         line = canvas.create_line(prev_x, prev_y, current_x, current_y, fill=drawing_color, width=line_width, capstyle=tk.ROUND, smooth=True) # creates a line between the previous and current x & y event positions and sets the color, line width, style, and smooths it out. Assign to var for list
-        lines.append(line) # stores line into the lines list
         prev_x, prev_y = current_x, current_y # sets the previous coordinates to the current coordinates, setting up the function to move/draw progressively
+        line_pieces.append(line) # stores line pieces into the list lines
+    line = [] # reset line to empty
 
 # create a function to call when the drawing / mouse event is finished
 def stop_drawing(event):
     global is_drawing
     is_drawing = False # set the global to false to end the drawing event
+    lines_list.append(line_pieces) # append line_pieces at the end of a draw event to the lines_list
 
 
 # calling th askcolor module to implement color selection
@@ -42,8 +45,11 @@ def change_line_width(value): # define function with a value taken as the arg
 
 # function for popping the line off the list and using it in the delete parameter
 def undo():
-    last_line = lines.pop() # remove last drawn line
-    canvas.delete(last_line) # deletes the last line based on our popped lines
+    if lines_list: # check if there are lines to undo
+        last_event_lines = lines_list.pop() # remove last draw event
+        # loop through last_event_lines
+        for line in last_event_lines:
+            canvas.delete(line) # delete each line piece of the last event
 
 
 
@@ -82,22 +88,22 @@ root.geometry("800x600") # sets the initial size of the root/canvas. This can be
 controls_frame = tk.Frame(root) # assigns a frame within root to the controls_frame variable
 controls_frame.pack(side="top", fill="x") # 'packs' a widget within the parent widget that is on the top side and expands with the frame along x
 
-# create 2 buttons with default positions within the screen
+# create 3 buttons with default positions within the screen
 color_button = tk.Button(controls_frame, text="Change Color", command=change_pen_color) # create the color button within the controls frame, with name text, and using the change_pen_color function
+undo_button = tk.Button(controls_frame, text="Undo", command=undo) # create undo button using lambda passthrough to call undo function
 clear_button = tk.Button(controls_frame, text="Clear Canvas", command=lambda: canvas.delete("all")) # create the clear canvas button with a lambda function passthrough on command to delete elements on the canvas
 
-color_button.pack(side="left", padx=5, pady=5) # set color button to default left side with 5 padding on x & y. Configures the widgets place within the control_frame
-clear_button.pack(side="left", padx=5, pady=5) # configures the widgets place within the control_frame
+color_button.pack(side="left", padx=5, pady=5) # set color button to default left side with 5 padding on x & y. Configures the widget's place within the control_frame
+undo_button.pack(side="left", padx=5, pady=5) # configures the widget's place within the control_frame
+clear_button.pack(side="left", padx=5, pady=5) # configures the widget's place within the control_frame
 
 # create slider for line width control
 line_width_label = tk.Label(controls_frame, text="Line Width: ") # create a label widget for line width in the control frame, gives it a name, and save it to a var
-line_width_label.pack(side="left", padx=5, pady=5) # configures the widgets place within the control_frame
+line_width_label.pack(side="left", padx=5, pady=5) # configures the widget's place within the control_frame
 
 line_width_slider = tk.Scale(controls_frame, from_=1, to=10, orient="horizontal", command=lambda val: change_line_width(val)) # creates a horizontal scale widget that lets the user select line width on a scale from 1 to 10. Command is set to call the change_line_wdith function with the selected lue whenever the slider position is changed
 line_width_slider.set(line_width) # Sets the initial position of the slider to the value stored in line_width (initialized earlier)
-line_width_slider.pack(side="left", padx=5, pady=5) # configures the widgets place within the control_frame
-
-# undo and 
+line_width_slider.pack(side="left", padx=5, pady=5) # configures the widget's place within the control_frame
 
 
 
