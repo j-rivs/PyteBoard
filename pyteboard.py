@@ -2,6 +2,8 @@ import tkinter as tk
 from tkinter.colorchooser import askcolor
 
 
+"""Storage List"""
+lines = [] # list to store drawn lines
 
 """Functions and Event Handling"""
 
@@ -16,7 +18,8 @@ def draw(event):
     global is_drawing, prev_x, prev_y
     if is_drawing: # checks if the is_drawing function is currently active/true
         current_x, current_y = event.x, event.y # creates current values or x & y based on their event values
-        canvas.create_line(prev_x, prev_y, current_x, current_y, fill=drawing_color, width=line_width, capstyle=tk.ROUND, smooth=True) # creates a line between the previous and current x & y event positions and sets the color, line width, style, and smooths it out
+        line = canvas.create_line(prev_x, prev_y, current_x, current_y, fill=drawing_color, width=line_width, capstyle=tk.ROUND, smooth=True) # creates a line between the previous and current x & y event positions and sets the color, line width, style, and smooths it out. Assign to var for list
+        lines.append(line) # stores line into a variable
         prev_x, prev_y = current_x, current_y # sets the previous coordinates to the current coordinates, setting up the function to move/draw progressively
 
 # create a function to call when the drawing / mouse event is finished
@@ -88,6 +91,8 @@ line_width_label.pack(side="left", padx=5, pady=5) # configures the widgets plac
 line_width_slider = tk.Scale(controls_frame, from_=1, to=10, orient="horizontal", command=lambda val: change_line_width(val)) # creates a horizontal scale widget that lets the user select line width on a scale from 1 to 10. Command is set to call the change_line_wdith function with the selected lue whenever the slider position is changed
 line_width_slider.set(line_width) # Sets the initial position of the slider to the value stored in line_width (initialized earlier)
 line_width_slider.pack(side="left", padx=5, pady=5) # configures the widgets place within the control_frame
+
+# undo and 
 
 
 
