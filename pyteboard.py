@@ -19,7 +19,7 @@ def draw(event):
     if is_drawing: # checks if the is_drawing function is currently active/true
         current_x, current_y = event.x, event.y # creates current values or x & y based on their event values
         line = canvas.create_line(prev_x, prev_y, current_x, current_y, fill=drawing_color, width=line_width, capstyle=tk.ROUND, smooth=True) # creates a line between the previous and current x & y event positions and sets the color, line width, style, and smooths it out. Assign to var for list
-        lines.append(line) # stores line into a variable
+        lines.append(line) # stores line into the lines list
         prev_x, prev_y = current_x, current_y # sets the previous coordinates to the current coordinates, setting up the function to move/draw progressively
 
 # create a function to call when the drawing / mouse event is finished
@@ -39,6 +39,11 @@ def change_pen_color():
 def change_line_width(value): # define function with a value taken as the arg
     global line_width
     line_width = int(value) # change the line width to the int typecast value
+
+# function for popping the line off the list and using it in the delete parameter
+def undo():
+    last_line = lines.pop() # remove last drawn line
+    canvas.delete(last_line) # deletes the last line based on our popped lines
 
 
 
